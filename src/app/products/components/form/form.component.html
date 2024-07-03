@@ -1,0 +1,19 @@
+<form (ngSubmit)="onSubmit()">
+
+    <div>
+        <input type="text" placeholder="name" name="name" [(ngModel)]="product.name" />
+    </div>
+
+    <div>   
+         <input type="text" placeholder="description" name="decription" [(ngModel)]="product.decription"/>
+    </div>
+
+    <div>
+        <input type="number" placeholder="price" name="price" [(ngModel)]="product.price" />
+    </div>
+
+    <div>
+        <button>Crear</button>
+    </div>
+
+</form>
