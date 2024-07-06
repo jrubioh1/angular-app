@@ -23,28 +23,38 @@ export class ProductsComponent implements OnInit{
   }
 
 
-  onRemoveProduct(id:number):void{
-    this.products= this.products.filter(product=>product.id != id);
-  }
-  public addProduct(product: Product):void{
-    //product.id=new Date().getTime()
-    //this.products.push(product); o, y es mejor
-    if (product.id>0){
-      this.products.map(prod=>{
-        if(prod.id==product.id){return {...product};}
-        return prod;  
+ addProduct(product: Product): void {
+
+    if (product.id > 0) {
+      this.service.update(product).subscribe(productUpdated => {
+        
+        this.products = this.products.map(prod => {
+          if (prod.id == product.id) {
+            return { ... productUpdated };
+          }
+          return prod;
+        });
+      });
+
+    } else {
+      this.service.create(product).subscribe(productNew => {
+        // this.products.push({ ...productNew });
+        this.products = [... this.products, { ...productNew }];
       })
     }
-    else{
-      this.products=[... this.products, {...product, id: new Date().getTime()}] 
-    }
-    
+    this.productSelected = new Product();
   }
 
-  onUpdateProduct(productRow:Product):void{
-
-    this.productSelected= {...productRow};
+  onRemoveProduct(id: number): void {
+    this.service.remove(id).subscribe(() => {
+      this.products = this.products.filter(product => product.id != id);
+    })
   }
+
+  onUpdateProduct(productRow: Product): void {
+    this.productSelected = {... productRow};
+  }
+
 
 
 
