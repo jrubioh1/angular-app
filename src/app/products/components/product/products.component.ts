@@ -14,6 +14,7 @@ import { FormsModule } from '@angular/forms';
 export class ProductsComponent implements OnInit{
 
   products:Product[]=[];
+  productSelected:Product=new Product();
 
   constructor(private service: ProductsService){}
 
@@ -21,11 +22,30 @@ export class ProductsComponent implements OnInit{
     this.service.findAll().subscribe(products=>this.products=products)
   }
 
+
+  onRemoveProduct(id:number):void{
+    this.products= this.products.filter(product=>product.id != id);
+  }
   public addProduct(product: Product):void{
     //product.id=new Date().getTime()
     //this.products.push(product); o, y es mejor
-    this.products=[... this.products, {...product, id: new Date().getTime()}] 
+    if (product.id>0){
+      this.products.map(prod=>{
+        if(prod.id==product.id){return {...product};}
+        return prod;  
+      })
+    }
+    else{
+      this.products=[... this.products, {...product, id: new Date().getTime()}] 
+    }
+    
   }
+
+  onUpdateProduct(productRow:Product):void{
+
+    this.productSelected= {...productRow};
+  }
+
 
 
 }
